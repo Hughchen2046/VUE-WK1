@@ -4,14 +4,14 @@ import { ref } from 'vue'
 
 // 初始化所有品項都要有 edit 欄位
 const items = ref([
-  { name: '珍珠奶茶', desc: '香濃奶茶搭配QQ珍珠', price: 50, stock: 20, edit: { name: false, desc: false, price: false } },
-  { name: '冬瓜檸檬', desc: '清新冬瓜配上新鮮檸檬', price: 45, stock: 18, edit: { name: false, desc: false, price: false } },
-  { name: '翡翠檸檬', desc: '綠茶與檸檬的完美結合', price: 55, stock: 34, edit: { name: false, desc: false, price: false } },
-  { name: '四季春茶', desc: '香醇四季春茶，回甘無比', price: 45, stock: 10, edit: { name: false, desc: false, price: false } },
-  { name: '阿薩姆奶茶', desc: '阿薩姆紅茶搭配香醇鮮奶', price: 50, stock: 25, edit: { name: false, desc: false, price: false } },
-  { name: '檸檬冰茶', desc: '檸檬與冰茶的清新組合', price: 45, stock: 20, edit: { name: false, desc: false, price: false } },
-  { name: '芒果綠茶', desc: '芒果與綠茶的獨特風味', price: 55, stock: 18, edit: { name: false, desc: false, price: false } },
-  { name: '抹茶拿鐵', desc: '抹茶與鮮奶的絕配', price: 60, stock: 20, edit: { name: false, desc: false, price: false } }
+  { name: '珍珠奶茶', desc: '香濃奶茶搭配QQ珍珠', price: 50, stock: 20, originalStock: 20, edit: { name: false, desc: false, price: false } },
+  { name: '冬瓜檸檬', desc: '清新冬瓜配上新鮮檸檬', price: 45, stock: 18, originalStock: 18, edit: { name: false, desc: false, price: false } },
+  { name: '翡翠檸檬', desc: '綠茶與檸檬的完美結合', price: 55, stock: 34, originalStock: 34, edit: { name: false, desc: false, price: false } },
+  { name: '四季春茶', desc: '香醇四季春茶，回甘無比', price: 45, stock: 10, originalStock: 10, edit: { name: false, desc: false, price: false } },
+  { name: '阿薩姆奶茶', desc: '阿薩姆紅茶搭配香醇鮮奶', price: 50, stock: 25, originalStock: 25, edit: { name: false, desc: false, price: false } },
+  { name: '檸檬冰茶', desc: '檸檬與冰茶的清新組合', price: 45, stock: 20, originalStock: 20, edit: { name: false, desc: false, price: false } },
+  { name: '芒果綠茶', desc: '芒果與綠茶的獨特風味', price: 55, stock: 18, originalStock: 18, edit: { name: false, desc: false, price: false } },
+  { name: '抹茶拿鐵', desc: '抹茶與鮮奶的絕配', price: 60, stock: 20, originalStock: 20, edit: { name: false, desc: false, price: false } }
 ])
 
 function minus(idx) {
@@ -39,10 +39,14 @@ function addItem() {
     desc: '請編輯描述',
     price: 0,
     stock: 0,
+    originalStock: 0,
     edit: { name: false, desc: false, price: false }
   })
 }
-
+// 重製品項
+function resetStock(idx) {
+  items.value[idx].stock = items.value[idx].originalStock
+}
 // 刪除品項
 function removeItem(idx) {
   items.value.splice(idx, 1)
@@ -95,8 +99,10 @@ function removeItem(idx) {
             {{ item.stock }}
             <button type="button" @click="positive(idx)" class="btn-round">+</button>
           </td>
-          <!-- 刪除按鈕 -->
-          <td>
+          <!-- 重置/刪除按鈕 -->
+          <td class="d-flex">
+            <button type="button" @click="resetStock(idx)" v-if="item.stock !== item.originalStock"
+              class="border-radius-10">Reset</button>
             <button type="button" @click="removeItem(idx)" class="border-radius-10">🗑</button>
           </td>
         </tr>
@@ -216,6 +222,10 @@ button {
   margin: 1rem;
   padding: 0.5rem 1rem;
   font-size: 1rem;
+}
+
+.d-flex {
+  display: flex;
 }
 
 .btn-round {
